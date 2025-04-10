@@ -23,6 +23,9 @@ lib-cov
 coverage
 *.lcov
 
+# Node package lock file
+package-lock.json
+
 # nyc test coverage
 .nyc_output
 
