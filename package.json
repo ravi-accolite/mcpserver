@@ -6,9 +6,9 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "yarn workspaces run build",
-        "test": "yarn workspaces run test",
-        "lint": "yarn workspaces run lint"
+        "build": "npm run build --workspaces",
+        "test": "npm run test --workspaces",
+        "lint": "npm run lint --workspaces"
     },
     "devDependencies": {
         "typescript": "^5.0.0"
