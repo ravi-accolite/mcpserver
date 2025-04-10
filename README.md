@@ -1,23 +1,39 @@
 # Bounteous MCP Server
 
-A Model Context Protocol (MCP) server implementation for Bounteous organization, enabling seamless integration between LLM applications and external data sources/tools.
+A Model Context Protocol (MCP) server implementation for Bounteous organization, enabling seamless integration between LLM applications and version control systems (GitHub and GitLab).
 
 ## Overview
 
-This MCP server provides a standardized way to connect Large Language Models (LLMs) with the context they need for Bounteous-specific operations and integrations. Built following the [Model Context Protocol](https://github.com/modelcontextprotocol) specifications.
+This MCP server provides a standardized way to connect Large Language Models (LLMs) with version control systems, enabling powerful automation and integration capabilities. Built following the [Model Context Protocol](https://github.com/modelcontextprotocol) specifications.
 
 ## Features
 
-- GitHub Integration
+### Version Control Integration
+- **GitHub Integration**
   - Repository management
   - Issue tracking
   - Pull request handling
   - Code review workflows
-- Custom Tool Integration
+  - Advanced search capabilities
+  - Branch management
   - File operations
-  - Directory management
-  - Code search capabilities
-  - Terminal command execution
+
+- **GitLab Integration**
+  - Project management
+  - Issue tracking
+  - Merge request handling
+  - Code review workflows
+  - Repository operations
+  - Branch management
+  - File operations
+
+### Common Features
+- Automatic branch creation
+- Comprehensive error handling
+- Git history preservation
+- Batch operations support
+- File and directory management
+- Code search capabilities
 
 ## Getting Started
 
@@ -25,7 +41,8 @@ This MCP server provides a standardized way to connect Large Language Models (LL
 
 - Node.js (v16 or higher)
 - npm or yarn package manager
-- GitHub account with appropriate permissions
+- GitLab or GitHub account with appropriate permissions
+- Personal Access Token for the respective service
 
 ### Installation
 
@@ -50,18 +67,74 @@ cp .env.example .env
 
 ### Usage
 
-1. Start the server:
+#### Docker
 ```bash
-npm run start
-# or
-yarn start
+# Build and run GitHub MCP Server
+docker build -t mcp/github -f packages/bounteous-hulk/src/github/Dockerfile .
+docker run -e GITHUB_PERSONAL_ACCESS_TOKEN=<your_token> mcp/github
+
+# Build and run GitLab MCP Server
+docker build -t mcp/gitlab -f packages/bounteous-hulk/src/gitlab/Dockerfile .
+docker run -e GITLAB_PERSONAL_ACCESS_TOKEN=<your_token> -e GITLAB_API_URL=https://gitlab.com/api/v4 mcp/gitlab
 ```
 
-2. The server will be available at `http://localhost:3000` by default
+#### NPX
+```bash
+# Run GitHub MCP Server
+npx -y bounteous-hulk --github-token <your_token>
 
-## API Documentation
+# Run GitLab MCP Server
+npx -y bounteous-hulk --gitlab-token <your_token> --gitlab-api-url https://gitlab.com/api/v4
+```
 
-The server implements the standard MCP protocol endpoints and custom extensions for Bounteous-specific functionality. Detailed API documentation is available in the `/docs` directory.
+### Configuration
+
+Add the following to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "mcp/github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
+      }
+    },
+    "gitlab": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e",
+        "GITLAB_PERSONAL_ACCESS_TOKEN",
+        "-e",
+        "GITLAB_API_URL",
+        "mcp/gitlab"
+      ],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>",
+        "GITLAB_API_URL": "https://gitlab.com/api/v4"
+      }
+    }
+  }
+}
+```
+
+## Documentation
+
+Detailed documentation for each MCP server is available in their respective directories:
+
+- [GitHub MCP Server Documentation](packages/bounteous-hulk/README.md#github-mcp-server)
+- [GitLab MCP Server Documentation](packages/bounteous-hulk/README.md#gitlab-mcp-server)
 
 ## Contributing
 
