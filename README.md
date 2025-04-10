@@ -87,7 +87,32 @@ npx -y bounteous-hulk --github-token <your_token>
 npx -y bounteous-hulk --gitlab-token <your_token> --gitlab-api-url https://gitlab.com/api/v4
 ```
 
-### Configuration
+### Configuration (Local Setup)
+
+Add the following to your `.cursor/mcp.json` (project level mcp server) or global level:
+
+```json
+{
+    "mcpServers": {
+        "bounteous-hulk": {
+            "command": "node",
+            "args": [
+                "<ABSOLUTE_PATH>/mcpserver/packages/bounteous-hulk/dist/index.js"
+            ],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "<GITHUB_TOKEN>",
+                "VERSION_CONTROL": "<OPTION>",
+                "GITLAB_PERSONAL_ACCESS_TOKEN": "<GITLAB_TOKEN>",
+                "GITLAB_API_URL": "<API_URL>"
+            }
+        }
+    }
+}
+```
+Different `VERSION_CONTROL` value possible: `github`, `gitlab`
+
+
+### Configuration with Docker
 
 Add the following to your `claude_desktop_config.json`:
 
