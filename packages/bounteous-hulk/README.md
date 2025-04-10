@@ -1,18 +1,19 @@
 # Bounteous MCP Servers
 
-# GitLab MCP Server
+This package provides MCP servers for both GitLab and GitHub APIs, enabling project management, file operations, and more.
 
-MCP Server for the GitLab API, enabling project management, file operations, and more.
+## Common Features
 
-### Features
+Both GitLab and GitHub MCP servers share these core features:
 
 - **Automatic Branch Creation**: When creating/updating files or pushing changes, branches are automatically created if they don't exist
 - **Comprehensive Error Handling**: Clear error messages for common issues
 - **Git History Preservation**: Operations maintain proper Git history without force pushing
 - **Batch Operations**: Support for both single-file and multi-file operations
 
+## GitLab MCP Server
 
-## Tools
+### Tools
 
 1. `create_or_update_file`
    - Create or update a single file in a project
@@ -97,95 +98,9 @@ MCP Server for the GitLab API, enabling project management, file operations, and
      - `ref` (optional string): Source branch/commit for new branch
    - Returns: Created branch reference
 
-## Setup
+## GitHub MCP Server
 
-### Personal Access Token
-[Create a GitLab Personal Access Token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) with appropriate permissions:
-   - Go to User Settings > Access Tokens in GitLab
-   - Select the required scopes:
-     - `api` for full API access
-     - `read_api` for read-only access
-     - `read_repository` and `write_repository` for repository operations
-   - Create the token and save it securely
-
-### Usage with Claude Desktop
-Add the following to your `claude_desktop_config.json`:
-
-#### Docker
-```json
-{
-  "mcpServers": { 
-    "gitlab": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "-e",
-        "GITLAB_PERSONAL_ACCESS_TOKEN",
-        "-e",
-        "GITLAB_API_URL",
-        "mcp/gitlab"
-      ],
-      "env": {
-        "GITLAB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>",
-        "GITLAB_API_URL": "https://gitlab.com/api/v4" // Optional, for self-hosted instances
-      }
-    }
-  }
-}
-```
-
-### NPX
-
-```json
-{
-  "mcpServers": {
-    "gitlab": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-gitlab"
-      ],
-      "env": {
-        "GITLAB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>",
-        "GITLAB_API_URL": "https://gitlab.com/api/v4" // Optional, for self-hosted instances
-      }
-    }
-  }
-}
-```
-
-## Build
-
-Docker build:
-
-```bash
-docker build -t vonwig/gitlab:mcp -f src/gitlab/Dockerfile .
-```
-
-## Environment Variables
-
-- `GITLAB_PERSONAL_ACCESS_TOKEN`: Your GitLab personal access token (required)
-- `GITLAB_API_URL`: Base URL for GitLab API (optional, defaults to `https://gitlab.com/api/v4`)
-
-
-
-# Github MCP Server
----
-
-MCP Server for the GitHub API, enabling file operations, repository management, search functionality, and more.
-
-### Features
-
-- **Automatic Branch Creation**: When creating/updating files or pushing changes, branches are automatically created if they don't exist
-- **Comprehensive Error Handling**: Clear error messages for common issues
-- **Git History Preservation**: Operations maintain proper Git history without force pushing
-- **Batch Operations**: Support for both single-file and multi-file operations
-- **Advanced Search**: Support for searching code, issues/PRs, and users
-
-
-## Tools
+### Tools
 
 1. `create_or_update_file`
    - Create or update a single file in a repository
@@ -345,139 +260,148 @@ MCP Server for the GitHub API, enabling file operations, repository management, 
     - Returns: User search results
 
 16. `list_commits`
-   - Gets commits of a branch in a repository
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `page` (optional string): page number
-     - `per_page` (optional string): number of record per page
-     - `sha` (optional string): branch name
-   - Returns: List of commits
+    - Gets commits of a branch in a repository
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `page` (optional string): page number
+      - `per_page` (optional string): number of record per page
+      - `sha` (optional string): branch name
+    - Returns: List of commits
 
 17. `get_issue`
-   - Gets the contents of an issue within a repository
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `issue_number` (number): Issue number to retrieve
-   - Returns: Github Issue object & details
+    - Gets the contents of an issue within a repository
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `issue_number` (number): Issue number to retrieve
+    - Returns: Github Issue object & details
 
 18. `get_pull_request`
-   - Get details of a specific pull request
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-   - Returns: Pull request details including diff and review status
+    - Get details of a specific pull request
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+    - Returns: Pull request details including diff and review status
 
 19. `list_pull_requests`
-   - List and filter repository pull requests
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `state` (optional string): Filter by state ('open', 'closed', 'all')
-     - `head` (optional string): Filter by head user/org and branch
-     - `base` (optional string): Filter by base branch
-     - `sort` (optional string): Sort by ('created', 'updated', 'popularity', 'long-running')
-     - `direction` (optional string): Sort direction ('asc', 'desc')
-     - `per_page` (optional number): Results per page (max 100)
-     - `page` (optional number): Page number
-   - Returns: Array of pull request details
+    - List and filter repository pull requests
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `state` (optional string): Filter by state ('open', 'closed', 'all')
+      - `head` (optional string): Filter by head user/org and branch
+      - `base` (optional string): Filter by base branch
+      - `sort` (optional string): Sort by ('created', 'updated', 'popularity', 'long-running')
+      - `direction` (optional string): Sort direction ('asc', 'desc')
+      - `per_page` (optional number): Results per page (max 100)
+      - `page` (optional number): Page number
+    - Returns: Array of pull request details
 
 20. `create_pull_request_review`
-   - Create a review on a pull request
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-     - `body` (string): Review comment text
-     - `event` (string): Review action ('APPROVE', 'REQUEST_CHANGES', 'COMMENT')
-     - `commit_id` (optional string): SHA of commit to review
-     - `comments` (optional array): Line-specific comments, each with:
-       - `path` (string): File path
-       - `position` (number): Line position in diff
-       - `body` (string): Comment text
-   - Returns: Created review details
+    - Create a review on a pull request
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+      - `body` (string): Review comment text
+      - `event` (string): Review action ('APPROVE', 'REQUEST_CHANGES', 'COMMENT')
+      - `commit_id` (optional string): SHA of commit to review
+      - `comments` (optional array): Line-specific comments, each with:
+        - `path` (string): File path
+        - `position` (number): Line position in diff
+        - `body` (string): Comment text
+    - Returns: Created review details
 
 21. `merge_pull_request`
-   - Merge a pull request
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-     - `commit_title` (optional string): Title for merge commit
-     - `commit_message` (optional string): Extra detail for merge commit
-     - `merge_method` (optional string): Merge method ('merge', 'squash', 'rebase')
-   - Returns: Merge result details
+    - Merge a pull request
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+      - `commit_title` (optional string): Title for merge commit
+      - `commit_message` (optional string): Extra detail for merge commit
+      - `merge_method` (optional string): Merge method ('merge', 'squash', 'rebase')
+    - Returns: Merge result details
 
 22. `get_pull_request_files`
-   - Get the list of files changed in a pull request
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-   - Returns: Array of changed files with patch and status details
+    - Get the list of files changed in a pull request
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+    - Returns: Array of changed files with patch and status details
 
 23. `get_pull_request_status`
-   - Get the combined status of all status checks for a pull request
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-   - Returns: Combined status check results and individual check details
+    - Get the combined status of all status checks for a pull request
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+    - Returns: Combined status check results and individual check details
 
 24. `update_pull_request_branch`
-   - Update a pull request branch with the latest changes from the base branch (equivalent to GitHub's "Update branch" button)
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-     - `expected_head_sha` (optional string): The expected SHA of the pull request's HEAD ref
-   - Returns: Success message when branch is updated
+    - Update a pull request branch with the latest changes from the base branch
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+      - `expected_head_sha` (optional string): The expected SHA of the pull request's HEAD ref
+    - Returns: Success message when branch is updated
 
 25. `get_pull_request_comments`
-   - Get the review comments on a pull request
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-   - Returns: Array of pull request review comments with details like the comment text, author, and location in the diff
+    - Get the review comments on a pull request
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+    - Returns: Array of pull request review comments with details
 
 26. `get_pull_request_reviews`
-   - Get the reviews on a pull request
-   - Inputs:
-     - `owner` (string): Repository owner
-     - `repo` (string): Repository name
-     - `pull_number` (number): Pull request number
-   - Returns: Array of pull request reviews with details like the review state (APPROVED, CHANGES_REQUESTED, etc.), reviewer, and review body
+    - Get the reviews on a pull request
+    - Inputs:
+      - `owner` (string): Repository owner
+      - `repo` (string): Repository name
+      - `pull_number` (number): Pull request number
+    - Returns: Array of pull request reviews with details
 
 ## Search Query Syntax
 
-### Code Search
+### GitHub Code Search
 - `language:javascript`: Search by programming language
 - `repo:owner/name`: Search in specific repository
 - `path:app/src`: Search in specific path
 - `extension:js`: Search by file extension
 - Example: `q: "import express" language:typescript path:src/`
 
-### Issues Search
+### GitHub Issues Search
 - `is:issue` or `is:pr`: Filter by type
 - `is:open` or `is:closed`: Filter by state
 - `label:bug`: Search by label
 - `author:username`: Search by author
 - Example: `q: "memory leak" is:issue is:open label:bug`
 
-### Users Search
+### GitHub Users Search
 - `type:user` or `type:org`: Filter by account type
 - `followers:>1000`: Filter by followers
 - `location:London`: Search by location
 - Example: `q: "fullstack developer" location:London followers:>100`
 
-For detailed search syntax, see [GitHub's searching documentation](https://docs.github.com/en/search-github/searching-on-github).
-
 ## Setup
 
-### Personal Access Token
+### Personal Access Tokens
+
+#### GitLab
+[Create a GitLab Personal Access Token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) with appropriate permissions:
+   - Go to User Settings > Access Tokens in GitLab
+   - Select the required scopes:
+     - `api` for full API access
+     - `read_api` for read-only access
+     - `read_repository` and `write_repository` for repository operations
+   - Create the token and save it securely
+
+#### GitHub
 [Create a GitHub Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with appropriate permissions:
    - Go to [Personal access tokens](https://github.com/settings/tokens) (in GitHub Settings > Developer settings)
    - Select which repositories you'd like this token to have access to (Public, All, or Select)
@@ -486,12 +410,30 @@ For detailed search syntax, see [GitHub's searching documentation](https://docs.
    - Copy the generated token
 
 ### Usage with Claude Desktop
-To use this with Claude Desktop, add the following to your `claude_desktop_config.json`:
+
+Add the following to your `claude_desktop_config.json`:
 
 #### Docker
 ```json
 {
   "mcpServers": {
+    "gitlab": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e",
+        "GITLAB_PERSONAL_ACCESS_TOKEN",
+        "-e",
+        "GITLAB_API_URL",
+        "mcp/gitlab"
+      ],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>",
+        "GITLAB_API_URL": "https://gitlab.com/api/v4"
+      }
+    },
     "github": {
       "command": "docker",
       "args": [
@@ -510,11 +452,21 @@ To use this with Claude Desktop, add the following to your `claude_desktop_confi
 }
 ```
 
-### NPX
-
+#### NPX
 ```json
 {
   "mcpServers": {
+    "gitlab": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-gitlab"
+      ],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>",
+        "GITLAB_API_URL": "https://gitlab.com/api/v4"
+      }
+    },
     "github": {
       "command": "npx",
       "args": [
@@ -531,11 +483,24 @@ To use this with Claude Desktop, add the following to your `claude_desktop_confi
 
 ## Build
 
-Docker build:
+### Docker Build Commands
 
 ```bash
+# Build GitLab MCP Server
+docker build -t mcp/gitlab -f src/gitlab/Dockerfile .
+
+# Build GitHub MCP Server
 docker build -t mcp/github -f src/github/Dockerfile .
 ```
+
+## Environment Variables
+
+### GitLab
+- `GITLAB_PERSONAL_ACCESS_TOKEN`: Your GitLab personal access token (required)
+- `GITLAB_API_URL`: Base URL for GitLab API (optional, defaults to `https://gitlab.com/api/v4`)
+
+### GitHub
+- `GITHUB_PERSONAL_ACCESS_TOKEN`: Your GitHub personal access token (required)
 
 ## License
 
