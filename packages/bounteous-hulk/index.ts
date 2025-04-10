@@ -7,6 +7,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import fetch from 'node-fetch';
 import { githubTools, handleGitHubRequest } from './src/versioncontrol/github/githubIndex.js';
+import { gitlabTools, handleGitLabRequest } from './src/versioncontrol/gitlab/gitlabIndex.js';
 
 // If fetch doesn't exist in global scope, add it
 if (!globalThis.fetch) {
@@ -33,6 +34,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       tools: githubTools,
     };
   }
+  else if (VERSION_CONTROL === 'gitlab') {
+    return {
+      tools: gitlabTools,
+    };
+  }
   
   throw new Error(`Unsupported version control system: ${VERSION_CONTROL}`);
 });
@@ -44,6 +50,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   if (VERSION_CONTROL === 'github') {
     return await handleGitHubRequest(request.params.name, request.params.arguments);
+  } 
+  else 
+  if (VERSION_CONTROL === 'gitlab') {
+    return await handleGitLabRequest(request.params.name, request.params.arguments);
   }
 
   throw new Error(`Unsupported version control system: ${VERSION_CONTROL}`);
