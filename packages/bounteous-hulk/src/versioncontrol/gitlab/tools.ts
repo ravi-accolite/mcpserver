@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { createToolSchema } from '../common/utils.js';
-import { RepositorySchema, BranchSchema, IssueSchema, MergeRequestSchema, FileOperationSchema } from '../common/types.js';
+import { createToolSchema } from './common/utils.js';
+import { RepositorySchema, BranchSchema, IssueSchema, MergeRequestSchema, FileOperationSchema } from './common/types.js';
 
 export const SearchRepositoriesSchema = z.object({
   search: z.string(),

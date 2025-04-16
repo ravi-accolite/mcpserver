@@ -1,7 +1,7 @@
 import fetch, { RequestInit, Response } from 'node-fetch';
 import { z } from 'zod';
-import { VersionControlClient } from '../common/interfaces.js';
-import { FileOperation, Repository, Branch, Issue, MergeRequest } from '../common/types.js';
+import { VersionControlClient } from './common/interfaces.js';
+import { FileOperation, Repository, Branch, Issue, MergeRequest } from './common/types.js';
 
 const GITLAB_API_URL = process.env.GITLAB_API_URL || 'https://gitlab.com/api/v4';
 const GITLAB_PERSONAL_ACCESS_TOKEN = process.env.GITLAB_PERSONAL_ACCESS_TOKEN;

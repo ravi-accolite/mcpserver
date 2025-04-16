@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { GitLabClient } from './client.js';
-import { handleError, createResponse } from '../common/utils.js';
+import { handleError, createResponse } from './common/utils.js';
 import {
   SearchRepositoriesSchema,
   CreateRepositorySchema,
